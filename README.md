@@ -5,7 +5,7 @@
 
   [![PWA](https://img.shields.io/badge/PWA-offline%20ready-ff8f86?logo=pwa&logoColor=white)](https://takvim-app-chi.vercel.app)
   [![React](https://img.shields.io/badge/React-19-61dafb?logo=react&logoColor=111)](https://react.dev/)
-  [![Build](https://img.shields.io/github/actions/workflow/status/kadircicek34/akis-daily-planner/ci.yml?branch=main&label=build)](https://github.com/kadircicek34/akis-daily-planner/actions)
+  [![Tests](https://img.shields.io/badge/tests-7%20passing-2b9772)](#testler)
   [![License](https://img.shields.io/badge/license-MIT-9176bb)](LICENSE)
 
   **[Canlı uygulamayı aç](https://takvim-app-chi.vercel.app)**
