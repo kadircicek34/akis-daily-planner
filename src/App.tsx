@@ -67,7 +67,7 @@ export default function App() {
   const [installPrompt, setInstallPrompt] = useState<InstallPromptEvent | null>(null)
   const [bridgeUrl, setBridgeUrl] = useState(() => localStorage.getItem('akis-bridge-url') || 'http://127.0.0.1:4318')
   const [bridgeKey, setBridgeKey] = useState(() => localStorage.getItem('akis-bridge-key') || '')
-  const [bridgeStatus, setBridgeStatus] = useState<'idle' | 'syncing' | 'ok' | 'error'>('idle')
+  const [bridgeStatus, setBridgeStatus] = useState<'idle' | 'syncing' | 'ok' | 'error' | 'permission'>('idle')
 
   useEffect(() => { localStorage.setItem('akis-tasks', JSON.stringify(tasks)) }, [tasks])
   useEffect(() => {
@@ -163,7 +163,10 @@ export default function App() {
       if (!saved.ok) throw new Error(`Köprü ${saved.status} hatası verdi.`)
       setTasks(next); setBridgeStatus('ok')
       localStorage.setItem('akis-bridge-url', base); localStorage.setItem('akis-bridge-key', bridgeKey)
-    } catch { setBridgeStatus('error') }
+    } catch {
+      const localFromWeb = location.protocol === 'https:' && /^http:\/\/(127\.0\.0\.1|localhost)/.test(base)
+      setBridgeStatus(localFromWeb ? 'permission' : 'error')
+    }
   }
 
   return <div className="app-shell">
@@ -244,7 +247,7 @@ type SettingsProps = {
   dark: boolean; setDark: (v: boolean) => void; mondayFirst: boolean; setMondayFirst: (v: boolean) => void; onClose: () => void; reset: () => void
   exportData: () => void; importData: (file: File) => void; canInstall: boolean; installApp: () => void
   bridgeUrl: string; setBridgeUrl: (v: string) => void; bridgeKey: string; setBridgeKey: (v: string) => void
-  bridgeStatus: 'idle' | 'syncing' | 'ok' | 'error'; syncBridge: () => void
+  bridgeStatus: 'idle' | 'syncing' | 'ok' | 'error' | 'permission'; syncBridge: () => void
 }
 function SettingsModal(props: SettingsProps) {
   const { dark, setDark, mondayFirst, setMondayFirst, onClose, reset, exportData, importData, canInstall, installApp, bridgeUrl, setBridgeUrl, bridgeKey, setBridgeKey, bridgeStatus, syncBridge } = props
@@ -254,7 +257,7 @@ function SettingsModal(props: SettingsProps) {
     <div className="setting-row"><div className="setting-icon"><CalendarDays /></div><div><strong>Haftanın başlangıcı</strong><span>{mondayFirst ? 'Pazartesi' : 'Pazar'}</span></div><button className="theme-toggle" onClick={() => setMondayFirst(!mondayFirst)}>Değiştir</button></div>
     <div className="setting-row"><div className="setting-icon"><Smartphone /></div><div><strong>Uygulamayı yükle</strong><span>{canInstall ? 'Bu cihaza kurulmaya hazır.' : 'Tarayıcı menüsünden Ana Ekrana Ekle.'}</span></div><button className="theme-toggle" disabled={!canInstall} onClick={installApp}>Yükle</button></div>
     <div className="settings-section"><h3>Veri yönetimi</h3><div className="settings-buttons"><button onClick={exportData}><Download /> Dışa aktar</button><label><Upload /> İçe aktar<input type="file" accept="application/json" onChange={e => e.target.files?.[0] && importData(e.target.files[0])} /></label></div></div>
-    <div className="settings-section bridge-section"><h3><CloudCog /> Agent Bridge</h3><p>Yerel MCP sunucusu ve PWA görevlerini aynı dosyada eşitler.</p><label className="field"><span>Köprü adresi</span><input value={bridgeUrl} onChange={e => setBridgeUrl(e.target.value)} /></label><label className="field"><span>API anahtarı (isteğe bağlı)</span><input type="password" value={bridgeKey} onChange={e => setBridgeKey(e.target.value)} placeholder="AKIS_API_KEY" /></label><button className={`sync-button ${bridgeStatus}`} disabled={bridgeStatus === 'syncing'} onClick={syncBridge}><RefreshCw /> {bridgeStatus === 'syncing' ? 'Eşitleniyor...' : bridgeStatus === 'ok' ? 'Eşitlendi' : bridgeStatus === 'error' ? 'Bağlantı başarısız' : 'Şimdi eşitle'}</button></div>
+    <div className="settings-section bridge-section"><h3><CloudCog /> Agent Bridge</h3><p>Yerel MCP sunucusu ve PWA görevlerini aynı dosyada eşitler.</p><label className="field"><span>Köprü adresi</span><input value={bridgeUrl} onChange={e => setBridgeUrl(e.target.value)} /></label><label className="field"><span>API anahtarı (isteğe bağlı)</span><input type="password" value={bridgeKey} onChange={e => setBridgeKey(e.target.value)} placeholder="AKIS_API_KEY" /></label><button className={`sync-button ${bridgeStatus}`} disabled={bridgeStatus === 'syncing'} onClick={syncBridge}><RefreshCw /> {bridgeStatus === 'syncing' ? 'Eşitleniyor...' : bridgeStatus === 'ok' ? 'Eşitlendi' : bridgeStatus === 'permission' ? 'Yerel ağ izni gerekli' : bridgeStatus === 'error' ? 'Bağlantı başarısız' : 'Şimdi eşitle'}</button>{bridgeStatus === 'permission' && <p className="bridge-help">Tarayıcı adres çubuğundaki site izinlerinden “Yerel ağ erişimi”ni açıp yeniden dene.</p>}</div>
     <button className="reset-button" onClick={() => { if (window.confirm('Tüm yerel görevler örnek verilerle değiştirilsin mi?')) { reset(); onClose() } }}>Örnek verileri geri yükle</button>
     <p className="settings-foot">Akış · Yerel, çevrimdışı ve agent uyumlu.</p>
   </section></div>

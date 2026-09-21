@@ -49,6 +49,8 @@ npm run agent:bridge
 
 Köprü yalnızca `127.0.0.1:4318` üzerinde dinler. Uygulamada **Ayarlar → Agent Bridge** alanındaki varsayılan adresi kullanıp **Şimdi eşitle** düğmesine bas.
 
+Chrome/Edge, canlı HTTPS uygulamasından loopback adresine ilk bağlantıda **Yerel ağ erişimi** izni sorar. İzni kabul et; daha önce reddettiysen adres çubuğundaki site izinlerinden açıp tekrar eşitle. `localhost` geliştirme görünümünde bu izin akışı tarayıcı sürümüne göre değişebilir.
+
 İsteğe bağlı API anahtarıyla başlatmak için:
 
 ```bash
