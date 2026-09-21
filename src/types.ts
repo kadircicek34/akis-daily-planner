@@ -10,4 +10,7 @@ export interface Task {
   icon: string
   completed: boolean
   notes?: string
+  priority?: 'low' | 'normal' | 'high'
+  tags?: string[]
+  updatedAt?: string
 }

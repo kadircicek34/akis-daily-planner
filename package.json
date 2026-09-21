@@ -1,7 +1,7 @@
 {
   "name": "akis-daily-planner",
   "private": true,
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Gelen kutusu, haftalık takvim ve görsel zaman çizelgesini bir araya getiren çevrimdışı PWA günlük planlayıcı.",
   "license": "MIT",
   "homepage": "https://takvim-app-chi.vercel.app",
@@ -15,18 +15,27 @@
     "build": "tsc -b && vite build",
     "preview": "vite preview --host 0.0.0.0",
     "test": "node tests/smoke.mjs",
-    "test:ci": "npm run build && npm test"
+    "test:agent": "node tests/agent.mjs",
+    "test:ci": "npm run build && npm run typecheck:agent && npm run test:agent && npm test",
+    "agent:mcp": "tsx server/mcp.ts",
+    "agent:bridge": "tsx server/bridge.ts",
+    "typecheck:agent": "tsc -p tsconfig.agent.json"
   },
   "dependencies": {
+    "@modelcontextprotocol/server": "^2.0.0",
     "lucide-react": "^0.544.0",
     "react": "^19.1.1",
-    "react-dom": "^19.1.1"
+    "react-dom": "^19.1.1",
+    "zod": "^4.6.5"
   },
   "devDependencies": {
+    "@modelcontextprotocol/client": "^2.0.0",
+    "@types/node": "^26.6.2",
     "@types/react": "^19.1.10",
     "@types/react-dom": "^19.1.7",
     "@vitejs/plugin-react": "^5.0.4",
     "playwright-core": "^1.63.0",
+    "tsx": "^4.23.15",
     "typescript": "^5.9.2",
     "vite": "^7.1.7",
     "vite-plugin-pwa": "^1.0.3"
