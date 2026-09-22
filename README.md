@@ -5,7 +5,7 @@
 
   [![PWA](https://img.shields.io/badge/PWA-offline%20ready-ff8f86?logo=pwa&logoColor=white)](https://takvim-app-chi.vercel.app)
   [![React](https://img.shields.io/badge/React-19-61dafb?logo=react&logoColor=111)](https://react.dev/)
-  [![Tests](https://img.shields.io/badge/tests-16%20passing-2b9772)](#testler)
+  [![Tests](https://img.shields.io/badge/tests-27%20passing-2b9772)](#testler)
   [![License](https://img.shields.io/badge/license-MIT-9176bb)](LICENSE)
 
   **[Canlı uygulamayı aç](https://takvim-app-chi.vercel.app)**
@@ -18,14 +18,21 @@
 - **Görsel zaman çizelgesi:** Günün görevlerini saat, süre, renk ve durum bilgileriyle tek akışta gör.
 - **Hızlı gelen kutusu:** Aklına gelen işi zaman belirlemeden kaydet, hazır olduğunda tek dokunuşla bugüne planla.
 - **Haftalık gezinme:** Haftanın günleri arasında geçiş yap ve yoğunluğu renkli göstergelerle takip et.
+- **Gün, hafta ve ay görünümü:** Planını farklı ölçeklerde görüntüle; görevleri günler arasında sürükleyip bırak.
 - **Eksiksiz görev yönetimi:** Başlık, tarih, başlangıç saati, süre, renk ve not alanlarıyla görev oluştur, düzenle veya sil.
+- **Tekrarlar ve alt görevler:** Günlük, haftalık, aylık veya yıllık görev serileri oluştur; işi küçük adımlara böl.
+- **Bildirim ve sesler:** Görev bazında hatırlatma seç; bağımsız üretilmiş, açık kaynak kodlu sentez seslerinden birini kullan veya sesi kapat.
+- **Odak ve enerji:** Tam ekran odak sayacıyla çalış; günlük iş yükünü enerji monitörüyle dengele.
+- **Takvim aktarımı:** Standart `.ics` dosyalarındaki etkinlikleri içe aktar.
+- **Günlük plan araçları:** Görevi veya günü kopyala; tamamlanmayan işleri ertesi güne yeniden planla.
 - **Arama ve sınıflandırma:** Başlık, not ve etiketlerde ara; görevleri öncelik, etiket, renk ve simgeyle düzenle.
 - **İlerleme takibi:** Tamamlanan görevleri işaretle ve günün ilerlemesini anlık gör.
 - **Açık ve koyu tema:** Tercih edilen görünüm cihazda kalıcı olarak saklanır.
 - **Yedekleme:** Tüm planı JSON olarak dışa aktar veya daha önceki bir yedeği içe al.
 - **Çevrimdışı PWA:** Ana ekrana kurulabilir; uygulama kabuğu ve tipografi internet olmadan çalışır.
-- **Yerel ve özel:** Görevler dış servise gönderilmez, yalnızca tarayıcının yerel depolamasında tutulur.
-- **AI içermez, agent uyumludur:** Uygulamada üretken AI yoktur; isteğe bağlı MCP ve REST köprüsüyle harici agent’lar görevleri yönetebilir.
+- **Yerel ve özel:** Varsayılan kullanımda görevler dış servise gönderilmez, yalnızca tarayıcının yerel depolamasında tutulur.
+- **AI tamamen isteğe bağlıdır:** Varsayılan olarak kapalıdır. Açıldığında yalnızca kullanıcının “AI ile öner” eylemi Agent Bridge üzerinden yapılandırdığı OpenAI uyumlu sağlayıcıya gider.
+- **Agent uyumludur:** Standart MCP ve yerel REST köprüsüyle chatbot/agent’lar görevleri yönetebilir.
 
 ## Mobil deneyim
 
@@ -59,7 +66,7 @@ Canlı uygulamayı Chrome, Edge veya Safari ile aç. Tarayıcının **Uygulamay�
 
 ## Testler
 
-Üretim önizlemesi; masaüstü ve mobil yerleşim, yatay taşma, görev oluşturma, manifest ve çevrimdışı service worker davranışı açısından gerçek Chromium oturumunda doğrulanır. Ayrı agent paketi MCP araç keşfini, MCP üzerinden görev oluşturma/okuma ve REST köprüsü yazma/okuma akışlarını test eder.
+Üretim önizlemesi; masaüstü ve mobil yerleşim, gün/hafta/ay görünümleri, yatay taşma, görev oluşturma, manifest ve çevrimdışı service worker davranışı açısından gerçek Chromium oturumunda doğrulanır. Özellik testleri tekrar, ICS ve enerji hesabını; agent paketi MCP araç keşfini, yeni alanların kayıpsız saklanmasını ve REST köprüsü akışlarını test eder.
 
 ```bash
 npm run test:ci
@@ -81,6 +88,8 @@ npm run agent:bridge
 
 Ardından uygulamada **Ayarlar → Agent Bridge → Şimdi eşitle** seçeneğini kullan. Ayrıntılı istemci yapılandırmaları ve API endpoint’leri için [Agent ve MCP entegrasyon rehberine](docs/agent-integration.md) bak.
 
+AI alt görev önerilerini kullanmak istersen Agent Bridge’e OpenAI uyumlu bir API (örneğin yerel Ollama uyumluluk endpoint’i) tanımlayıp uygulamadaki **İsteğe bağlı AI** anahtarını aç. Anahtar kapalıyken uygulama hiçbir AI isteği yapmaz.
+
 ## Teknik yapı
 
 - React 19 ve TypeScript
@@ -89,13 +98,15 @@ Ardından uygulamada **Ayarlar → Agent Bridge → Şimdi eşitle** seçeneğin
 - Resmi Model Context Protocol TypeScript SDK v2
 - Loopback ile sınırlandırılmış REST Agent Bridge
 - Lucide SVG ikonları
-- Harici API veya sunucu gerektirmeyen `localStorage` veri katmanı
+- Varsayılan olarak harici API veya sunucu gerektirmeyen `localStorage` veri katmanı
 - Masaüstü, tablet ve telefon için duyarlı CSS
 - Vercel üzerinde otomatik statik dağıtım
 
 ## Veri ve gizlilik
 
-Akış hesap oluşturmaz ve analitik kodu içermez. Varsayılan kullanımda görevler, notlar ve tema tercihi yalnızca kullanılan tarayıcıda saklanır. Agent Bridge isteğe bağlıdır, yalnızca `127.0.0.1` üzerinde dinler ve veriyi `~/.akis/tasks.json` dosyasında tutar. Tarayıcı verileri temizlendiğinde eşitlenmemiş yerel plan silinir.
+Akış hesap oluşturmaz ve analitik kodu içermez. Varsayılan kullanımda görevler, notlar ve tercihler yalnızca kullanılan tarayıcıda saklanır. Agent Bridge isteğe bağlıdır, yalnızca `127.0.0.1` üzerinde dinler ve veriyi `~/.akis/tasks.json` dosyasında tutar. AI API anahtarı tarayıcıya verilmez; yalnızca yerel Bridge ortamında kalır. Tarayıcı verileri temizlendiğinde eşitlenmemiş yerel plan silinir.
+
+Bildirim zamanlayıcısı PWA açıkken çalışır. Uygulama tamamen kapalıyken teslim garantisi için ayrıca kimlik doğrulamalı bir Web Push sunucusu gerekir; bu sürüm kullanıcı hesabı veya uzak bildirim aboneliği oluşturmaz.
 
 ## Katkı
 

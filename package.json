@@ -1,7 +1,7 @@
 {
   "name": "akis-daily-planner",
   "private": true,
-  "version": "1.1.0",
+  "version": "2.0.0",
   "description": "Gelen kutusu, haftalık takvim ve görsel zaman çizelgesini bir araya getiren çevrimdışı PWA günlük planlayıcı.",
   "license": "MIT",
   "homepage": "https://takvim-app-chi.vercel.app",
@@ -16,7 +16,8 @@
     "preview": "vite preview --host 0.0.0.0",
     "test": "node tests/smoke.mjs",
     "test:agent": "node tests/agent.mjs",
-    "test:ci": "npm run build && npm run typecheck:agent && npm run test:agent && npm test",
+    "test:features": "node --import tsx tests/features.mjs",
+    "test:ci": "npm run build && npm run typecheck:agent && npm run test:features && npm run test:agent && npm test",
     "agent:mcp": "tsx server/mcp.ts",
     "agent:bridge": "tsx server/bridge.ts",
     "typecheck:agent": "tsc -p tsconfig.agent.json"

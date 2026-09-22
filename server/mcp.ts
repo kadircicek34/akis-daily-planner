@@ -10,6 +10,12 @@ const taskFields = {
   duration: z.number().int().min(5).max(1440).optional(), notes: z.string().max(4000).optional(),
   completed: z.boolean().optional(), priority: z.enum(['low', 'normal', 'high']).optional(),
   tags: z.array(z.string().min(1).max(40)).max(10).optional(),
+  allDay: z.boolean().optional(),
+  subtasks: z.array(z.object({ id: z.string().optional(), title: z.string().min(1).max(160), completed: z.boolean().optional() })).max(100).optional(),
+  reminderMinutes: z.number().int().min(0).max(10080).nullable().optional(),
+  notificationSound: z.enum(['soft', 'bell', 'bright', 'none']).optional(),
+  repeat: z.enum(['none', 'daily', 'weekly', 'monthly', 'yearly']).optional(),
+  energy: z.number().int().min(-2).max(3).optional(),
 }
 const taskPatch = { title: z.string().min(1).max(160).optional(), ...taskFields }
 
@@ -19,7 +25,7 @@ function result(value: unknown) {
 
 export function createAkisServer() {
   const server = new McpServer(
-    { name: 'akis-daily-planner', version: '1.1.0', websiteUrl: 'https://takvim-app-chi.vercel.app' },
+    { name: 'akis-daily-planner', version: '2.0.0', websiteUrl: 'https://takvim-app-chi.vercel.app' },
     { instructions: 'Akış kullanıcısının görevlerini yönet. Tarihleri YYYY-MM-DD, saatleri HH:mm biçiminde kullan. Silme işleminden önce kullanıcıdan onay al.' },
   )
 

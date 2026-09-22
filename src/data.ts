@@ -9,8 +9,8 @@ export const seedTasks = (): Task[] => {
   const today = todayKey()
   const updatedAt = new Date().toISOString()
   return [
-    { id: '1', title: 'Güne başla', date: today, start: '07:00', duration: 15, color: 'coral', icon: 'alarm', completed: true, priority: 'normal', tags: ['rutin'], updatedAt },
-    { id: '2', title: 'Sabah rutini', date: today, start: '07:15', duration: 45, color: 'blue', icon: 'list', completed: false, notes: 'Hazırlan ve güne sakin başla', priority: 'normal', tags: ['rutin'], updatedAt },
+    { id: '1', title: 'Güne başla', date: today, start: '07:00', duration: 15, color: 'coral', icon: 'alarm', completed: true, priority: 'normal', tags: ['rutin'], updatedAt, reminderMinutes: 0, notificationSound: 'soft', repeat: 'none', energy: 0, subtasks: [] },
+    { id: '2', title: 'Sabah rutini', date: today, start: '07:15', duration: 45, color: 'blue', icon: 'list', completed: false, notes: 'Hazırlan ve güne sakin başla', priority: 'normal', tags: ['rutin'], updatedAt, reminderMinutes: 5, notificationSound: 'soft', repeat: 'none', energy: 1, subtasks: [{ id: 's1', title: 'Hazırlan', completed: true }, { id: 's2', title: 'Günün planına bak', completed: false }] },
     { id: '3', title: 'Kahvaltı', date: today, start: '08:00', duration: 30, color: 'green', icon: 'coffee', completed: false, priority: 'normal', tags: [], updatedAt },
     { id: '4', title: 'Odaklanma zamanı', date: today, start: '09:00', duration: 90, color: 'purple', icon: 'focus', completed: false, priority: 'high', tags: ['odak'], updatedAt },
     { id: '5', title: 'Öğle yemeği', date: today, start: '12:30', duration: 45, color: 'amber', icon: 'utensils', completed: false, priority: 'normal', tags: [], updatedAt },

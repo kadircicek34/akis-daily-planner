@@ -69,6 +69,7 @@ Aynı anahtarı PWA ayarlarındaki API anahtarı alanına gir.
 | `POST` | `/v1/tasks` | Yeni görev oluşturur. |
 | `PATCH` | `/v1/tasks/:id` | Görevi günceller. |
 | `DELETE` | `/v1/tasks/:id` | Görevi siler. |
+| `POST` | `/v1/ai/subtasks` | Yapılandırılmış AI sağlayıcısından alt görev önerileri alır. |
 
 Anahtar etkinse `Authorization: Bearer <anahtar>` başlığı zorunludur.
 
@@ -79,6 +80,18 @@ curl -X POST http://127.0.0.1:4318/v1/tasks \
   -H 'Content-Type: application/json' \
   -d '{"title":"Sunumu hazırla","date":"2026-09-22","start":"14:00","duration":60,"priority":"high"}'
 ```
+
+## İsteğe bağlı AI
+
+AI varsayılan olarak kapalı ve yapılandırılmamıştır. OpenAI uyumlu bir servisle alt görev önerilerini etkinleştirmek için Bridge'i şu değişkenlerle başlat:
+
+```bash
+AKIS_AI_BASE_URL="http://127.0.0.1:11434/v1" \
+AKIS_AI_MODEL="qwen3:8b" \
+npm run agent:bridge
+```
+
+Uzak bir sağlayıcı kullanıyorsan `AKIS_AI_API_KEY` değişkenini de ekle. Anahtar PWA'ya aktarılmaz; Bridge sunucu tarafında `Authorization` başlığını ekler. Ardından uygulamada **Ayarlar → İsteğe bağlı AI** seçeneğini aç. AI yalnızca görev düzenleyicide **AI ile öner** düğmesine basıldığında çağrılır.
 
 ## Güvenlik sınırı
 

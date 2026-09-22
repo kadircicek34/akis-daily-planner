@@ -16,6 +16,14 @@ export type AgentTask = {
   priority?: 'low' | 'normal' | 'high'
   tags?: string[]
   updatedAt?: string
+  allDay?: boolean
+  subtasks?: { id?: string; title: string; completed?: boolean }[]
+  reminderMinutes?: number | null
+  notificationSound?: 'soft' | 'bell' | 'bright' | 'none'
+  repeat?: 'none' | 'daily' | 'weekly' | 'monthly' | 'yearly'
+  seriesId?: string
+  energy?: number
+  source?: 'local' | 'calendar' | 'agent'
 }
 
 type StoreFile = { version: 1; tasks: AgentTask[] }
@@ -30,6 +38,11 @@ function normalizeTask(input: Partial<AgentTask> & Pick<AgentTask, 'title'>): Ag
     color: input.color || 'coral', icon: input.icon || 'list', completed: Boolean(input.completed),
     notes: input.notes || '', priority: input.priority || 'normal',
     tags: Array.isArray(input.tags) ? input.tags.map(String).filter(Boolean).slice(0, 10) : [],
+    allDay: Boolean(input.allDay),
+    subtasks: Array.isArray(input.subtasks) ? input.subtasks.filter(item => item?.title?.trim()).map(item => ({ id: item.id || randomUUID(), title: item.title.trim(), completed: Boolean(item.completed) })).slice(0, 100) : [],
+    reminderMinutes: input.reminderMinutes == null ? null : Math.max(0, Math.min(10080, Number(input.reminderMinutes) || 0)),
+    notificationSound: input.notificationSound || 'soft', repeat: input.repeat || 'none',
+    seriesId: input.seriesId, energy: Math.max(-2, Math.min(3, Math.round(Number(input.energy) || 0))), source: input.source || 'agent',
     updatedAt: input.updatedAt || new Date().toISOString(),
   }
 }
